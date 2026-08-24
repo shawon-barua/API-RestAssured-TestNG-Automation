@@ -14,12 +14,15 @@ public class UserFactory {
         Map<String, String> randomUser = new HashMap<>();
 
         Faker user = new Faker();
-
         FakeValuesService fakeValuesService = new FakeValuesService(Locale.ENGLISH, new RandomService());
 
-        String email = fakeValuesService.bothify("??????????#####@??????.com");
+        String email = System.getenv("TEST_USER_EMAIL") != null 
+                ? System.getenv("TEST_USER_EMAIL") 
+                : fakeValuesService.bothify("??????????#####@??????.com");
 
-        String password = fakeValuesService.bothify("?????#####");
+        String password = System.getenv("TEST_USER_PASSWORD") != null 
+                ? System.getenv("TEST_USER_PASSWORD") 
+                : fakeValuesService.bothify("?????#####");
 
         randomUser.put("firstName", user.name().firstName());
         randomUser.put("lastName", user.name().lastName());

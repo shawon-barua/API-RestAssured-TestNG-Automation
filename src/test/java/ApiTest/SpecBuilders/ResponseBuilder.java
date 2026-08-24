@@ -1,6 +1,7 @@
 package ApiTest.SpecBuilders;
 
 import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.http.ContentType;
 import io.restassured.specification.ResponseSpecification;
 
 /**
@@ -8,14 +9,18 @@ import io.restassured.specification.ResponseSpecification;
  * for testing API endpoints.
  */
 public class ResponseBuilder {
-    static ResponseSpecification rspec;
-    static ResponseSpecBuilder responsebuild;
 
     public static ResponseSpecification postResponse() {
-        responsebuild = new ResponseSpecBuilder();
-        responsebuild.expectStatusCode(201);
-        responsebuild.expectContentType("application/json");
+        return new ResponseSpecBuilder()
+                .expectStatusCode(201)
+                .expectContentType(ContentType.JSON)
+                .build();
+    }
 
-        return responsebuild.build();
+    public static ResponseSpecification okResponse() {
+        return new ResponseSpecBuilder()
+                .expectStatusCode(200)
+                .expectContentType(ContentType.JSON)
+                .build();
     }
 }
