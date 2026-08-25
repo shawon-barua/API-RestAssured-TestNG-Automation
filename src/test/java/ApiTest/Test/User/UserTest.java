@@ -45,7 +45,7 @@ public class UserTest {
                 .then()
                 .spec(postResponse())
                 .statusCode(201)
-                .body(matchesJsonSchemaInClasspath("schemas/user-created-schema.json"))
+                .body(matchesJsonSchemaInClasspath("src/test/resources/schemas/schemas/user-created-schema.json"))
                 .extract().response();
 
         String token = response.jsonPath().get("token");
