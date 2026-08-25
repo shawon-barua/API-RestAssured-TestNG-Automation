@@ -11,17 +11,18 @@ import io.restassured.specification.ResponseSpecification;
  */
 public class ResponseBuilder {
 
-    public static ResponseSpecification postResponse() {
-        return new ResponseSpecBuilder()
-                .expectStatusCode(201)
-                .expectContentType(ContentType.JSON)
-                .build();
-    }
+   public static ResponseSpecification postResponse() {
+    return new ResponseSpecBuilder()
+            .expectStatusCode(201) // 🟢 Changed to 201
+            .expectContentType(ContentType.JSON)
+            .build();
+}
 
-    public static ResponseSpecification okResponse() {
-        return new ResponseSpecBuilder()
-                .expectStatusCode(200)
-                .expectContentType(ContentType.JSON)
-                .build();
-    }
+// Add a brand new method for normal 200 OK responses (like Login or Delete)
+public static ResponseSpecification okResponse() {
+    return new ResponseSpecBuilder()
+            .expectStatusCode(200) // 🟢 Set to 200
+            .expectContentType(ContentType.JSON)
+            .build();
+}
 }

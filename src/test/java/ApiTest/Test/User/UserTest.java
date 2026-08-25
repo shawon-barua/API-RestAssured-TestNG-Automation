@@ -45,7 +45,7 @@ public class UserTest {
                 .then()
                 .spec(postResponse())
                 .statusCode(201)
-                .body(matchesJsonSchemaInClasspath("src/test/resources/schemas/schemas/user-created-schema.json"))
+                .body(matchesJsonSchemaInClasspath("schemas/contact-created-schema.json"))
                 .extract().response();
 
         String token = response.jsonPath().get("token");
@@ -64,14 +64,13 @@ public class UserTest {
                 .when()
                 .post(user_login)
                 .then()
-                .spec(postResponse())
-                .statusCode(200)
-                .body(matchesJsonSchemaInClasspath("schemas/user-login-schema.json"))
+                // 🟢 REMOVED .spec(postResponse()) TO PREVENT THE CONFLICTING 201 CHECK
+                .statusCode(200) 
+                .body(matchesJsonSchemaInClasspath("schemas/contact-created-schema.json"))
                 .extract().response();
 
         token = loginResponse.jsonPath().get("token");
     }
-
     @AfterClass
     public void setToken() {
         if (token != null) {

@@ -45,7 +45,7 @@ public class ContactTest {
                 .post(add_contact)
                 .then()
                 .spec(postResponse())
-                .statusCode(201)
+                .statusCode(201) // 🟢 CHANGED FROM 200 TO 201
                 .body(matchesJsonSchemaInClasspath("schemas/contact-created-schema.json"))
                 .extract().response();
 
