@@ -1,3 +1,4 @@
+
 package ApiTest.endpoints;
 
 /**
@@ -15,3 +16,4 @@ public class Routes {
     public static final String add_contact = "/contacts";
     public static final String delete_contact = "/contacts";
 }
+

@@ -6,8 +6,7 @@ import io.restassured.specification.RequestSpecification;
 
 import static ApiTest.endpoints.Routes.base_URL;
 
-
-**/
+/**
  * The RequestBuilder class provides methods to configure and build request specifications
  * for API testing.
  */
@@ -30,3 +29,6 @@ public class RequestBuilder {
                 .build();
     }
 }
+```
+
+---

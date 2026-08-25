@@ -1,3 +1,4 @@
+
 package ApiTest.SpecBuilders;
 
 import io.restassured.builder.ResponseSpecBuilder;
@@ -23,4 +24,4 @@ public class ResponseBuilder {
                 .expectContentType(ContentType.JSON)
                 .build();
     }
-}
+}`

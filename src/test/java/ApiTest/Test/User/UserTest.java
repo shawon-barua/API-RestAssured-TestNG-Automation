@@ -1,10 +1,9 @@
+
 package ApiTest.Test.User;
 
 import ApiTest.POJO.userLogin;
 import ApiTest.Utils.UserFactory;
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -13,20 +12,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static ApiTest.SpecBuilders.RequestBuilder.requestSpec;
 import static ApiTest.SpecBuilders.ResponseBuilder.postResponse;
 import static ApiTest.endpoints.Routes.create_user_endpoint;
 import static ApiTest.endpoints.Routes.user_login;
 import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 /**
- * The UserTest class is a collection of unit test cases for testing user-related API functionalities,
- * including user creation and user login.
- * It uses various utilities and libraries to facilitate the API testing process.
+ * The UserTest class contains unit test cases for testing user-related API endpoints.
  */
 public class UserTest {
-    Properties props = new Properties();
+    private static final Logger LOGGER = Logger.getLogger(UserTest.class.getName());
+    private Properties props = new Properties();
     private Map<String, String> user;
     private String token;
 
@@ -37,17 +38,17 @@ public class UserTest {
 
     @Test
     public void testCreateUser() {
-        Response response = RestAssured.given()
-                .log().all()
+        Response response = given()
                 .spec(requestSpec())
                 .body(user)
-                // ... request specifications ...
                 .when()
                 .post(create_user_endpoint)
                 .then()
-                .log().all()
                 .spec(postResponse())
+                .statusCode(201)
+                .body(matchesJsonSchemaInClasspath("schemas/user-created-schema.json"))
                 .extract().response();
+
         String token = response.jsonPath().get("token");
         user.put("token", token);
     }
@@ -58,22 +59,29 @@ public class UserTest {
         userCredentials.setEmail(user.get("email"));
         userCredentials.setPassword(user.get("password"));
 
-        RequestSpecification reqLogin = given().log().all().spec(requestSpec()).body(userCredentials);
-        Response loginResponse = reqLogin.when().post(user_login).then().log().all().extract().response();
-        token = loginResponse.jsonPath().get("token");
+        Response loginResponse = given()
+                .spec(requestSpec())
+                .body(userCredentials)
+                .when()
+                .post(user_login)
+                .then()
+                .spec(postResponse())
+                .statusCode(200)
+                .body(matchesJsonSchemaInClasspath("schemas/user-login-schema.json"))
+                .extract().response();
 
+        token = loginResponse.jsonPath().get("token");
     }
 
     @AfterClass
     public void setToken() {
-
-        props.setProperty("token", token);
-        System.out.println("Token value1: " + token);
-        try (FileOutputStream output = new FileOutputStream("src/test/resources/config.properties")) {
-            props.store(output, "Configuration");
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (token != null) {
+            props.setProperty("token", token);
+            try (FileOutputStream output = new FileOutputStream("src/test/resources/config.properties")) {
+                props.store(output, "Configuration");
+            } catch (IOException e) {
+                LOGGER.log(Level.SEVERE, "Failed to write token to config.properties", e);
+            }
         }
     }
-
 }
