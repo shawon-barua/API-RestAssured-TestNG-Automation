@@ -24,4 +24,4 @@ public class ResponseBuilder {
                 .expectContentType(ContentType.JSON)
                 .build();
     }
-}`
+}
