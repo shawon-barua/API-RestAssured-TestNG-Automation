@@ -19,7 +19,7 @@ public class ContactFactory {
     public static Map<String, Object> readJsonData() {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.readValue(new File("src/test/resources/testdata.json"), Map.class);
+            return objectMapper.readValue(new File("src/test/resources/schemas/schemas/user-created-schema.json"), Map.class);
         } catch (IOException e) {
             throw new RuntimeException("Error reading JSON file: " + e.getMessage(), e);
         }
